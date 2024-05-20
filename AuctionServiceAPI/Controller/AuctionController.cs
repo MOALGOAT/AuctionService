@@ -31,7 +31,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet("{_id}")]
-        public async Task<ActionResult<Auction>> GetAuction(Guid _id)
+        public async Task<ActionResult<Auction>> GetAuction(Guid _id) 
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
@@ -82,7 +82,7 @@ namespace AuctionServiceAPI.Controllers
 
             if (_id != auction._id)
             {
-                return BadRequest();
+                return BadRequest("ding ding ding ding du fik et badrequest fordi id ikke matcher! :D");
             }
 
             var result = await _auctionService.UpdateAuction(auction);

@@ -59,11 +59,21 @@ namespace AuctionServiceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> AddAuction(Auction auction)
         {
-            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+            try
+            {
+                _logger.LogInformation($"Received request to add auction: {auction._id}");
+                _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
-            var auctionId = await _auctionService.AddAuction(auction);
-            return Ok(auctionId);
+                var auctionId = await _auctionService.AddAuction(auction);
+                return Ok(auctionId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, "An error occurred while adding an auction.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
+
 
         [HttpPut("{_id}")]
         public async Task<IActionResult> UpdateAuction(Guid _id, Auction auction)

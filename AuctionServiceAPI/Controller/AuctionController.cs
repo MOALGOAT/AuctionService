@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using AuctionServiceAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AuctionServiceAPI.Controllers
@@ -20,9 +22,19 @@ namespace AuctionServiceAPI.Controllers
             _logger = logger;
         }
 
+        private string GetIpAddress()
+        {
+            var hostName = Dns.GetHostName();
+            var ips = Dns.GetHostAddresses(hostName);
+            var ipaddr = ips.First().MapToIPv4().ToString();
+            return ipaddr;
+        }
+
         [HttpGet("{_id}")]
         public async Task<ActionResult<Auction>> GetAuction(Guid _id)
         {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+
             var auction = await _auctionService.GetAuction(_id);
             if (auction == null)
             {
@@ -34,6 +46,8 @@ namespace AuctionServiceAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Auction>>> GetAuctionList()
         {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+
             var auctionList = await _auctionService.GetAuctionList();
             if (auctionList == null)
             {
@@ -45,13 +59,27 @@ namespace AuctionServiceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> AddAuction(Auction auction)
         {
-            var auctionId = await _auctionService.AddAuction(auction);
-            return Ok(auctionId);
+            try
+            {
+                _logger.LogInformation($"Received request to add auction: {auction._id}");
+                _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+
+                var auctionId = await _auctionService.AddAuction(auction);
+                return Ok(auctionId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, "An error occurred while adding an auction.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
+
 
         [HttpPut("{_id}")]
         public async Task<IActionResult> UpdateAuction(Guid _id, Auction auction)
         {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+
             if (_id != auction._id)
             {
                 return BadRequest();
@@ -69,6 +97,8 @@ namespace AuctionServiceAPI.Controllers
         [HttpDelete("{_id}")]
         public async Task<IActionResult> DeleteAuction(Guid _id)
         {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+
             var result = await _auctionService.DeleteAuction(_id);
             if (result == 0)
             {

@@ -24,10 +24,10 @@ namespace AuctionServiceAPI.Tests
             // Act & Assert
             Assert.DoesNotThrow(() =>
             {
-                Assert.IsInstanceOf<Item>(auction.item);
-                Assert.IsInstanceOf<DateTime>(auction.startTime);
-                Assert.IsInstanceOf<DateTime>(auction.endTime);
-                Assert.IsInstanceOf<List<Bid>>(auction.bids);
+                Assert.IsNotNull(auction.item);
+                Assert.IsNotNull(auction.startTime);
+                Assert.IsNotNull(auction.endTime);
+                Assert.IsNotNull(auction.bids);
             });
         }
 

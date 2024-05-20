@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   auction-service:
-    image: jakobhaulund/auction-service-image3:1.0.0
+    image: jakobhaulund/auction-service-image:1.0.0
     ports:
       - 82:8080
     container_name: auction-service

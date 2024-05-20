@@ -1,21 +1,17 @@
-﻿using System;
+﻿using AuctionServiceAPI.Models;
+using System;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 
 public class Auction
 {
-    public int _id { get; set; }
-    public Item Item { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
-    public List<Bid> Bids { get; set; }
+    [BsonId]
+    public Guid _id { get; set; }
+    public Item item { get; set; }
+    public DateTime startTime { get; set; }
+    public DateTime endTime { get; set; }
+    public List<Bid> bids { get; set; }
+    public User buyer { get; set; }
+    public User seller { get; set; }
 }
 
-public class Item
-{
- 
-}
-
-public class Bid
-{
- 
-}

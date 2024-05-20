@@ -11,11 +11,11 @@ namespace AuctionServiceAPI.Models
 {
     public interface IAuctionService
     {
-        Task<Auction?> GetAuction(int auctionId);
+        Task<Auction?> GetAuction(Guid auctionId);
         Task<IEnumerable<Auction>?> GetAuctionList();
-        Task<int> AddAuction(Auction auction);
+        Task<Guid> AddAuction(Auction auction);
         Task<long> UpdateAuction(Auction auction);
-        Task<long> DeleteAuction(int auctionId);
+        Task<long> DeleteAuction(Guid auctionId);
     }
 
     public class AuctionMongoDBService : IAuctionService
@@ -36,7 +36,7 @@ namespace AuctionServiceAPI.Models
             _logger.LogInformation($"Collection name: {collectionName}");
         }
 
-        public async Task<Auction?> GetAuction(int auctionId)
+        public async Task<Auction?> GetAuction(Guid auctionId)
         {
             var filter = Builders<Auction>.Filter.Eq(x => x._id, auctionId);
             return await _auctionCollection.Find(filter).FirstOrDefaultAsync();
@@ -47,7 +47,7 @@ namespace AuctionServiceAPI.Models
             return await _auctionCollection.Find(_ => true).ToListAsync();
         }
 
-        public async Task<int> AddAuction(Auction auction)
+        public async Task<Guid> AddAuction(Auction auction)
         {
             await _auctionCollection.InsertOneAsync(auction);
             return auction._id;
@@ -60,7 +60,7 @@ namespace AuctionServiceAPI.Models
             return result.ModifiedCount;
         }
 
-        public async Task<long> DeleteAuction(int auctionId)
+        public async Task<long> DeleteAuction(Guid auctionId)
         {
             var filter = Builders<Auction>.Filter.Eq(x => x._id, auctionId);
             var result = await _auctionCollection.DeleteOneAsync(filter);

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using AuctionServiceAPI.Models;
 
 namespace AuctionServiceAPI.Tests
 {
@@ -13,21 +14,20 @@ namespace AuctionServiceAPI.Tests
             // Arrange
             var auction = new Auction
             {
-                _id = 1,
-                Item = new Item(),
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(1),
-                Bids = new List<Bid>()
+                _id = Guid.NewGuid(),
+                item = new Item(),
+                startTime = DateTime.Now,
+                endTime = DateTime.Now.AddHours(1),
+                bids = new List<Bid>()
             };
 
             // Act & Assert
             Assert.DoesNotThrow(() =>
             {
-                Assert.That(auction._id, Is.EqualTo(1));
-                Assert.IsNotNull(auction.Item);
-                Assert.IsNotNull(auction.StartTime);
-                Assert.IsNotNull(auction.EndTime);
-                Assert.IsNotNull(auction.Bids);
+                Assert.IsInstanceOf<Item>(auction.item);
+                Assert.IsInstanceOf<DateTime>(auction.startTime);
+                Assert.IsInstanceOf<DateTime>(auction.endTime);
+                Assert.IsInstanceOf<List<Bid>>(auction.bids);
             });
         }
 
@@ -37,11 +37,11 @@ namespace AuctionServiceAPI.Tests
             // Arrange
             var auction = new Auction
             {
-                _id = 1,
-                Item = new Item(),
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(-1), // Setting end time in the past
-                Bids = new List<Bid>()
+                _id = Guid.NewGuid(),
+                item = new Item(),
+                startTime = DateTime.Now,
+                endTime = DateTime.Now.AddHours(-1), // Setting end time in the past
+                bids = new List<Bid>()
             };
 
             // Act & Assert
@@ -62,18 +62,18 @@ namespace AuctionServiceAPI.Tests
 
             var auction = new Auction
             {
-                _id = 1,
-                Item = new Item(),
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(1),
-                Bids = bids
+                _id = Guid.NewGuid(),
+                item = new Item(),
+                startTime = DateTime.Now,
+                endTime = DateTime.Now.AddHours(1),
+                bids = bids
             };
 
             // Act & Assert
-            Assert.That(auction.Bids, Is.Not.Null);
-            Assert.AreEqual(2, auction.Bids.Count);
-            Assert.Contains(bid1, auction.Bids);
-            Assert.Contains(bid2, auction.Bids);
+            Assert.That(auction.bids, Is.Not.Null);
+            Assert.AreEqual(2, auction.bids.Count);
+            Assert.Contains(bid1, auction.bids);
+            Assert.Contains(bid2, auction.bids);
         }
 
         [Test]
@@ -84,11 +84,11 @@ namespace AuctionServiceAPI.Tests
             {
                 var auction = new Auction
                 {
-                    _id = 1,
-                    Item = null, // Setting item to null should throw ArgumentNullException
-                    StartTime = DateTime.Now,
-                    EndTime = DateTime.Now.AddHours(1),
-                    Bids = new List<Bid>()
+                    _id = Guid.NewGuid(),
+                    item = null, // Setting item to null should throw ArgumentNullException
+                    startTime = DateTime.Now,
+                    endTime = DateTime.Now.AddHours(1),
+                    bids = new List<Bid>()
                 };
             });
         }
@@ -105,11 +105,11 @@ namespace AuctionServiceAPI.Tests
             {
                 var auction = new Auction
                 {
-                    _id = 1,
-                    Item = new Item(),
-                    StartTime = DateTime.Now,
-                    EndTime = DateTime.Now.AddHours(1),
-                    Bids = bids
+                    _id = Guid.NewGuid(),
+                    item = new Item(),
+                    startTime = DateTime.Now,
+                    endTime = DateTime.Now.AddHours(1),
+                    bids = bids
                 };
             });
         }
@@ -122,11 +122,11 @@ namespace AuctionServiceAPI.Tests
             {
                 var auction = new Auction
                 {
-                    _id = 1,
-                    Item = new Item(),
-                    StartTime = DateTime.Now.AddHours(1), // Setting start time after end time
-                    EndTime = DateTime.Now,
-                    Bids = new List<Bid>()
+                    _id = Guid.NewGuid(),
+                    item = new Item(),
+                    startTime = DateTime.Now.AddHours(1), // Setting start time after end time
+                    endTime = DateTime.Now,
+                    bids = new List<Bid>()
                 };
             });
         }

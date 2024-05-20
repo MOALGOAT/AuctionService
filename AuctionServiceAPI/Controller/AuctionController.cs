@@ -21,7 +21,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet("{_id}")]
-        public async Task<ActionResult<Auction>> GetAuction(int _id)
+        public async Task<ActionResult<Auction>> GetAuction(Guid _id)
         {
             var auction = await _auctionService.GetAuction(_id);
             if (auction == null)
@@ -50,7 +50,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpPut("{_id}")]
-        public async Task<IActionResult> UpdateAuction(int _id, Auction auction)
+        public async Task<IActionResult> UpdateAuction(Guid _id, Auction auction)
         {
             if (_id != auction._id)
             {
@@ -67,7 +67,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpDelete("{_id}")]
-        public async Task<IActionResult> DeleteAuction(int _id)
+        public async Task<IActionResult> DeleteAuction(Guid _id)
         {
             var result = await _auctionService.DeleteAuction(_id);
             if (result == 0)

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  auction-service:
+    image: salimboo/auction-service-image:1.0.0
+    ports:
+      - 82:8080
+    container_name: auction-service
+    hostname: auction-service
+    networks:
+      - auctionnetwork
+
+networks:
+  auctionnetwork:
+    name: auctionnetwork
+    driver: bridge

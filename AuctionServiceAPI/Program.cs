@@ -2,19 +2,21 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using AuctionServiceAPI.Controllers;
 using AuctionServiceAPI.Models;
 using AuctionServiceAPI.Service;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
 builder.Services.AddSingleton<MongoDBContext>();
-builder.Services.AddSingleton<IUserInterface, UserMongoDBService>();
+
+builder.Services.AddSingleton<IAuctionService, AuctionMongoDBService>();
 
 var app = builder.Build();
 
@@ -29,3 +31,4 @@ app.MapControllers();
 app.UseHttpsRedirection();
 
 app.Run();
+

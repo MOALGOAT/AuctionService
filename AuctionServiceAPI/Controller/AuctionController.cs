@@ -78,7 +78,7 @@ namespace AuctionServiceAPI.Controllers
         [HttpPut("{_id}")]
         public async Task<IActionResult> UpdateAuction(Guid _id, Auction auction)
         {
-            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+            _logger.LogInformation(1, $"auction Service responding from {GetIpAddress()}");
 
             if (_id != auction._id)
             {

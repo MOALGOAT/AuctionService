@@ -22,7 +22,58 @@ services:
     hostname: auction-service
     networks:
       - auctionnetwork
+      
+ # authenticationservice:
+  #  image: rasmusdd/authenticationservice-image:latest
+   # ports:
+    #  - 82:8080
+    #environment:
+     # - ConnectionString=mongodb://admin:1234@mongodb:27017
+      #- DatabaseName=4SemProj
+      #- collectionName=Bruger
+      #- vaultConnectionString=https://vault_dev:8201
+    #container_name: authenticationservice
+    #hostname: authenticationservice
+    #networks:
+     # - auctionnetwork
+    #command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
 
+  userservice:
+    image: jakobhaulund/bruger-service-image:latest
+    ports:
+      - 80:8080
+    environment:
+      - ConnectionString=mongodb://admin:1234@mongodb:27017
+      - DatabaseName=4SemProj
+      - collectionName=Bruger
+    container_name: userservice
+    hostname: userservice
+    networks:
+      - auctionnetwork
+      
+  catalogservice:
+    image: rasmusdd/catalogservicegit-image:latest
+    container_name: catalogservice
+    hostname: catalogservice
+    ports:
+      - 81:8080
+    environment:
+      - ConnectionString=mongodb://admin:1234@mongodb:27017
+      - DatabaseName=4SemProj
+      - collectionName=Katalog
+    networks:
+      - auctionnetwork
+      
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "85:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - auctionnetwork
+  
 networks:
   auctionnetwork:
     driver: bridge

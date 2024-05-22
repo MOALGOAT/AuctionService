@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   biddingservice:
-    image: rasmusdd/biddingservice-image:latest
+    image: rasmusdd/biddingservice-image:1.0.0
     container_name: biddingservice
     hostname: biddingservice
     ports:
@@ -69,6 +69,12 @@ services:
     container_name: nginx
     ports:
       - "85:8080"
+    depends_on:
+      - userservice
+      - authenticationservice
+      - auction-service
+      - biddingservice
+      - catalogservice
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     networks:

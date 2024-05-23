@@ -110,5 +110,63 @@ namespace AuctionServiceAPI.Controllers
 
             return Ok();
         }
+
+        [HttpGet("legal/auctions/{auctionId}")]
+
+public async Task<ActionResult<object>> GetLegalAuction(Guid auctionId)
+{
+    _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+
+    var auction = await _auctionService.GetAuction(auctionId);
+    if (auction == null)
+    {
+        return NotFound(new { error = "Auction not found" });
+    }
+
+    var response = new 
+    {
+        id = auction._id,
+        title = auction.item.title,
+        description = auction.item.description,
+        startDate = auction.startTime,
+        endDate = auction.endTime,
+        currentBid = auction.bids.Any() ? auction.bids.Max(b => b.bidPrice) : 0,
+        createdBy = auction.seller.username, // Assuming CreatedBy can be the seller's username
+        createdAt = auction.startTime // Assuming CreatedAt is the same as startTime
+    };
+
+    return Ok(response);
+}
+[HttpGet("legal/auctions")]
+public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions([FromQuery] DateTime? startDate)
+{
+    _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+    
+    var auctions = await _auctionService.GetAuctionList();
+    if (auctions == null || !auctions.Any())
+    {
+        return NotFound(new { error = "No auctions found" });
+    }
+
+    if (startDate.HasValue)
+    {
+        auctions = auctions.Where(a => a.startTime >= startDate.Value).ToList();
+    }
+
+    var response = auctions.Select(a => new 
+    {
+        id = a._id,
+        title = a.item.title,
+        description = a.item.description,
+        startDate = a.startTime,
+        endDate = a.endTime,
+        currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
+        createdBy = a.seller.username, // Assuming CreatedBy can be the seller's username
+        createdAt = a.startTime // Assuming CreatedAt is the same as startTime
+    });
+
+    return Ok(response);
+}
+
     }
 }

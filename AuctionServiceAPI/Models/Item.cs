@@ -6,9 +6,9 @@ namespace AuctionServiceAPI.Models
     {
         [BsonId]
         Guid _id { get; set; }
-        string title { get; set; }
-        string description { get; set; }
-        string category { get; set; }
+     public string title { get; set; }
+    public string description { get; set; }
+    public string category { get; set; }
         float startingPrice { get; set; }
         string status { get; set; }
 

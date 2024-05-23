@@ -7,6 +7,6 @@ namespace AuctionServiceAPI.Models
         [BsonId]
         Guid _id { get; set; }
         User user { get; set; }
-        float bidPrice { get; set; }
+        public float bidPrice { get; set; }
     }
 }

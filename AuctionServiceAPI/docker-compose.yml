@@ -1,28 +1,16 @@
 version: '3.8'
 
-services: 
-  RabbitMQ: 
-    image: rabbitmq:3-management
-    ports: 
-      - 15672:15672
-      - 5672:5672
-    container_name: RabbitMQ
-    hostname: RabbitMQ
-    networks: 
-      - auctionnetwork
-
+services:
   auction-service:
     image: jakobhaulund/auction-service-image:latest
     ports:
-      - 82:8080
+      - 84:8080
     container_name: auction-service
     hostname: auction-service
-    depends_on:
-      - RabbitMQ
     networks:
       - auctionnetwork
-
+  
 networks:
   auctionnetwork:
-    name: auctionnetwork
+    driver: bridge
     external: true

@@ -19,10 +19,13 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddControllers();
-
-    builder.Services.AddSingleton<MongoDBContext>();
-
     builder.Services.AddSingleton<IAuctionService, AuctionMongoDBService>();
+    builder.Services.AddSingleton<MongoDBContext>();
+    builder.Services.AddHostedService<BidReceiver>();
+   
+
+
+
 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();

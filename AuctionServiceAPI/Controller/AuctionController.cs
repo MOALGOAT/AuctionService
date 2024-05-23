@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AuctionServiceAPI.Service;
+
 
 namespace AuctionServiceAPI.Controllers
 {
@@ -49,6 +51,7 @@ namespace AuctionServiceAPI.Controllers
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
             var auctionList = await _auctionService.GetAuctionList();
+
             if (auctionList == null)
             {
                 throw new ApplicationException("Auction list is null");

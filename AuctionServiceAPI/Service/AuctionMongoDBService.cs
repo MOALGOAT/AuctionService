@@ -16,12 +16,19 @@ namespace AuctionServiceAPI.Models
         Task<Guid> AddAuction(Auction auction);
         Task<long> UpdateAuction(Auction auction);
         Task<long> DeleteAuction(Guid auctionId);
+        Task ProcessMessageAsync(string message);
     }
 
     public class AuctionMongoDBService : IAuctionService
     {
         private readonly ILogger<AuctionMongoDBService> _logger;
         private readonly IMongoCollection<Auction> _auctionCollection;
+        public async Task ProcessMessageAsync(string message)
+            {
+                // Implement your message processing logic here
+                _logger.LogInformation($"Processing message: {message}");
+                // Example: Parse the message and perform operations
+            }
 
         public AuctionMongoDBService(ILogger<AuctionMongoDBService> logger, MongoDBContext dbContext, IConfiguration configuration)
         {

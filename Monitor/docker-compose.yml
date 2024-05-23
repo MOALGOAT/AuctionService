@@ -1,10 +1,5 @@
 version: "3.8"
 
-networks:
-  auctionnetwork:
-    name: auctionnetwork
-    external: true
-      
 services:
   loki:
     image: grafana/loki
@@ -20,3 +15,32 @@ services:
       - "3000:3000"
     networks:
       - auctionnetwork
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - auctionnetwork
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    ports:
+      - "27019:27017"
+    container_name: mongodb
+    hostname: mongodb
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - auctionnetwork
+      
+networks:
+  auctionnetwork:
+    driver: bridge
+      
+volumes:
+  mongodb_data_container:

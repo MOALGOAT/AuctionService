@@ -14,5 +14,7 @@ namespace AuctionServiceAPI.Models
         public string telephonenumber { get; set; }
         public string role { get; set; }    
         public string email { get; set; }
+        public DateTime created_at { get; set; }
+
     }
 }

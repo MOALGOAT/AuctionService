@@ -21,7 +21,7 @@ public class BidReceiver : BackgroundService
     {
         _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
-        var factory = new ConnectionFactory { HostName = "localhost" }; // Use the hostname defined in Docker Compose
+        var factory = new ConnectionFactory { HostName = Environment.GetEnvironmentVariable("QueueHostName")}; // Use the hostname defined in Docker Compose
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         _channel.QueueDeclare(queue: "bid_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);

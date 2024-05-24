@@ -19,7 +19,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MongoConnectionString": "",
         "DatabaseName": "",
-        "vaultConnectionString": "https://localhost:8200"
+        "vaultConnectionString": "https://localhost:8200",
+        "QueueHostName": "localhost"
       }
     },
     "https": {
@@ -32,7 +33,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MongoConnectionString": "",
         "DatabaseName": "",
-        "vaultConnectionString": "https://localhost:8200"
+        "vaultConnectionString": "https://localhost:8200",
+        "QueueHostName": "localhost"
+
       }
     },
     "IIS Express": {

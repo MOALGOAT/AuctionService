@@ -1,27 +1,25 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using AuctionServiceAPI.Models;
-using MongoDB.Bson.IO;
 
 public class BidReceiver : BackgroundService
 {
     private readonly IModel _channel;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly ILogger<BidReceiver> _logger;
+    private readonly IAuctionService _auctionService;
 
-    public BidReceiver(IServiceScopeFactory serviceScopeFactory, ILogger<BidReceiver> logger)
+    public BidReceiver(ILogger<BidReceiver> logger, IAuctionService auctionService) // Ændret
     {
-        _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
-        var factory = new ConnectionFactory { HostName = Environment.GetEnvironmentVariable("QueueHostName")}; // Use the hostname defined in Docker Compose
+        _auctionService = auctionService; // Tilføjet
+        var factory = new ConnectionFactory { HostName = Environment.GetEnvironmentVariable("QueueHostName") }; // Brug værtsnavnet defineret i Docker Compose
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         _channel.QueueDeclare(queue: "bid_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
@@ -44,17 +42,29 @@ public class BidReceiver : BackgroundService
 
     private async Task HandleMessageAsync(string message)
     {
-        //logg
-        //deserialized 
-        //find auktion mongodb filter 
-        //indsæt på filtreret auktion
+        // Log modtagelse af besked
+        _logger.LogInformation($" [x] Received {message}");
 
+        try
+        {
+            // Deserialiser beskeden til en Bid objekt
+            var bid = JsonSerializer.Deserialize<Bid>(message);
 
-       // using var scope = _serviceScopeFactory.CreateScope();
-        //var auctionService = scope.ServiceProvider.GetRequiredService<IAuctionService>();
-        //await auctionService.ProcessMessageAsync(message);
-        //her er bid modtaget - nu skal finde auktion - og sætte bud ind på list<bids>
-        //kan mongo gøre automatisk - mongoDB filter 
+            if (bid != null)
+            {
+                // Brug ProcessBidAsync metoden fra IAuctionService
+                await _auctionService.ProcessBidAsync(bid);
+                _logger.LogInformation("Auction updated with new bid.");
+            }
+            else
+            {
+                _logger.LogError("Failed to deserialize bid message.");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error processing message: {ex.Message}");
+        }
     }
 
     public override void Dispose()

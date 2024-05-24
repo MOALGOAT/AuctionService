@@ -21,6 +21,7 @@ try
     var vaultService=new VaultService(configuration);
     string connectionString=await vaultService.GetConnectionStringAsync("secrets", "MongoConnectionString");
     configuration["MongoConnectionString"]=connectionString;
+    vaultService = new VaultService(configuration);
     Console.WriteLine("Jeg hedder Furkan 123"+connectionString);
 
     builder.Services.AddEndpointsApiExplorer();

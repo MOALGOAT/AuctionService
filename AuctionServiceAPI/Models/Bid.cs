@@ -8,5 +8,6 @@ namespace AuctionServiceAPI.Models
         Guid _id { get; set; }
         User user { get; set; }
         public float bidPrice { get; set; }
+        public Guid auctionId { get; set; }
     }
 }

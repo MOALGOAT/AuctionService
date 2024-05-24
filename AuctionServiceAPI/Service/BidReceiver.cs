@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AuctionServiceAPI.Models;
+using MongoDB.Bson.IO;
 
 public class BidReceiver : BackgroundService
 {
@@ -23,7 +24,7 @@ public class BidReceiver : BackgroundService
         var factory = new ConnectionFactory { HostName = "localhost" }; // Use the hostname defined in Docker Compose
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
-        _channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false, arguments: null);
+        _channel.QueueDeclare(queue: "bid_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,7 +37,7 @@ public class BidReceiver : BackgroundService
             _logger.LogInformation($" [x] Received {message}");
             await HandleMessageAsync(message);
         };
-        _channel.BasicConsume(queue: "hello", autoAck: true, consumer: consumer);
+        _channel.BasicConsume(queue: "bid_queue", autoAck: true, consumer: consumer);
 
         return Task.CompletedTask;
     }

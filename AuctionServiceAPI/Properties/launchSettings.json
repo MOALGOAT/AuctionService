@@ -16,7 +16,10 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5119",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MongoConnectionString": "",
+        "DatabaseName": "",
+        "vaultConnectionString": "https://localhost:8200"
       }
     },
     "https": {
@@ -26,7 +29,10 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7276;http://localhost:5119",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MongoConnectionString": "",
+        "DatabaseName": "",
+        "vaultConnectionString": "https://localhost:8200"
       }
     },
     "IIS Express": {

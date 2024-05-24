@@ -67,6 +67,21 @@ services:
       - collectionName=Katalog
     networks:
       - auctionnetwork
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    depends_on:
+      - userservice
+    #  - authenticationservice
+      - auction-service
+      - biddingservice
+      - catalogservice
+    networks:
+      - auctionnetwork
       
   nginx:
     image: nginx:latest

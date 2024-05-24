@@ -17,6 +17,7 @@ namespace AuctionServiceAPI.Models
         Task<long> UpdateAuction(Auction auction);
         Task<long> DeleteAuction(Guid auctionId);
         Task ProcessMessageAsync(string message);
+        Task ProcessBidAsync (Bid bid);
     }
 
     public class AuctionMongoDBService : IAuctionService
@@ -29,6 +30,15 @@ namespace AuctionServiceAPI.Models
                 _logger.LogInformation($"Processing message: {message}");
                 // Example: Parse the message and perform operations
             }
+
+
+        public async Task ProcessBidAsync(Bid bid)
+        {
+            var filter = Builders<Auction>.Filter.Eq(a => a._id, bid.auctionId);
+            var update = Builders<Auction>.Update.Push(a => a.bids, bid);
+            await _auctionCollection.UpdateOneAsync(filter, update);
+            _logger.LogInformation($"Bid processed for auction {bid.auctionId}");
+        }
 
         public AuctionMongoDBService(ILogger<AuctionMongoDBService> logger, MongoDBContext dbContext, IConfiguration configuration)
         {

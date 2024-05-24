@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AuctionServiceAPI.Service;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace AuctionServiceAPI.Controllers
@@ -33,7 +34,8 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet("{_id}")]
-        public async Task<ActionResult<Auction>> GetAuction(Guid _id) 
+        [Authorize(Roles = "1,2")]
+        public async Task<ActionResult<Auction>> GetAuction(Guid _id)
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
@@ -46,6 +48,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "1,2")]
         public async Task<ActionResult<IEnumerable<Auction>>> GetAuctionList()
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
@@ -60,6 +63,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "2")]
         public async Task<ActionResult<int>> AddAuction(Auction auction)
         {
             try
@@ -79,6 +83,7 @@ namespace AuctionServiceAPI.Controllers
 
 
         [HttpPut("{_id}")]
+        [Authorize(Roles = "2")]
         public async Task<IActionResult> UpdateAuction(Guid _id, Auction auction)
         {
             _logger.LogInformation(1, $"auction Service responding from {GetIpAddress()}");
@@ -98,6 +103,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpDelete("{_id}")]
+        [Authorize(Roles = "2")]
         public async Task<IActionResult> DeleteAuction(Guid _id)
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
@@ -112,61 +118,63 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet("legal/auctions/{auctionId}")]
+        [Authorize(Roles = "2")]
+        public async Task<ActionResult<object>> GetLegalAuction(Guid auctionId)
+        {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
-public async Task<ActionResult<object>> GetLegalAuction(Guid auctionId)
-{
-    _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+            var auction = await _auctionService.GetAuction(auctionId);
+            if (auction == null)
+            {
+                return NotFound(new { error = "Auction not found" });
+            }
 
-    var auction = await _auctionService.GetAuction(auctionId);
-    if (auction == null)
-    {
-        return NotFound(new { error = "Auction not found" });
-    }
+            var response = new
+            {
+                id = auction._id,
+                title = auction.item.title,
+                description = auction.item.description,
+                startDate = auction.startTime,
+                endDate = auction.endTime,
+                currentBid = auction.bids.Any() ? auction.bids.Max(b => b.bidPrice) : 0,
+                createdBy = auction.seller.username, // Assuming CreatedBy can be the seller's username
+                createdAt = auction.startTime // Assuming CreatedAt is the same as startTime
+            };
 
-    var response = new 
-    {
-        id = auction._id,
-        title = auction.item.title,
-        description = auction.item.description,
-        startDate = auction.startTime,
-        endDate = auction.endTime,
-        currentBid = auction.bids.Any() ? auction.bids.Max(b => b.bidPrice) : 0,
-        createdBy = auction.seller.username, // Assuming CreatedBy can be the seller's username
-        createdAt = auction.startTime // Assuming CreatedAt is the same as startTime
-    };
+            return Ok(response);
+        }
 
-    return Ok(response);
-}
-[HttpGet("legal/auctions")]
-public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions([FromQuery] DateTime? startDate)
-{
-    _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
-    
-    var auctions = await _auctionService.GetAuctionList();
-    if (auctions == null || !auctions.Any())
-    {
-        return NotFound(new { error = "No auctions found" });
-    }
+        [HttpGet("legal/auctions")]
+        [Authorize(Roles = "2")]
+        public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions([FromQuery] DateTime? startDate)
+        {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
-    if (startDate.HasValue)
-    {
-        auctions = auctions.Where(a => a.startTime >= startDate.Value).ToList();
-    }
+            var auctions = await _auctionService.GetAuctionList();
+            if (auctions == null || !auctions.Any())
+            {
+                return NotFound(new { error = "No auctions found" });
+            }
 
-    var response = auctions.Select(a => new 
-    {
-        id = a._id,
-        title = a.item.title,
-        description = a.item.description,
-        startDate = a.startTime,
-        endDate = a.endTime,
-        currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
-        createdBy = a.seller.username, // Assuming CreatedBy can be the seller's username
-        createdAt = a.startTime // Assuming CreatedAt is the same as startTime
-    });
+            if (startDate.HasValue)
+            {
+                auctions = auctions.Where(a => a.startTime >= startDate.Value).ToList();
+            }
 
-    return Ok(response);
-}
+            var response = auctions.Select(a => new
+            {
+                id = a._id,
+                title = a.item.title,
+                description = a.item.description,
+                startDate = a.startTime,
+                endDate = a.endTime,
+                currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
+                createdBy = a.seller.username, // Assuming CreatedBy can be the seller's username
+                createdAt = a.startTime // Assuming CreatedAt is the same as startTime
+            });
+
+            return Ok(response);
+        }
 
     }
 }

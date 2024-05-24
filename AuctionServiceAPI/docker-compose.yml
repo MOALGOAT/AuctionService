@@ -11,8 +11,12 @@ services:
       - vaultConnectionString=https://vaulthost:8201
       - DatabaseName=4SemProj
       - collectionName=Bidding
+      - QueueHostName=rabbitmq
+      - vaultConnectionString=https://vaulthost:8201
     networks:
       - auctionnetwork
+    restart: unless-stopped
+
       
   auction-service:
     image: jakobhaulund/auction-service-image:latest
@@ -23,10 +27,12 @@ services:
       - DatabaseName=4SemProj
       - collectionName=Auktion
       - QueueHostName=rabbitmq
+      - vaultConnectionString=https://vaulthost:8201
     container_name: auction-service
     hostname: auction-service
     networks:
       - auctionnetwork
+    restart: unless-stopped
       
  # authenticationservice:
   #  image: rasmusdd/authenticationservice-image:latest
@@ -51,10 +57,14 @@ services:
       - ConnectionString=mongodb://admin:1234@mongodb:27017
       - DatabaseName=4SemProj
       - collectionName=Bruger
+      - vaultConnectionString=https://vaulthost:8201
+
     container_name: userservice
     hostname: userservice
     networks:
       - auctionnetwork
+    restart: unless-stopped
+
       
   catalogservice:
     image: rasmusdd/catalogservicegit-image:latest
@@ -68,10 +78,13 @@ services:
       - collectionName=Katalog
     networks:
       - auctionnetwork
+    restart: unless-stopped
+
 
 
   rabbitmq:
     image: rabbitmq:3-management
+    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"

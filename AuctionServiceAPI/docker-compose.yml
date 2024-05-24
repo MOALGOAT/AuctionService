@@ -65,22 +65,33 @@ services:
       - auctionnetwork
     restart: unless-stopped
 
-      
   catalogservice:
     image: rasmusdd/catalogservicegit-image:latest
-    container_name: catalogservice
-    hostname: catalogservice
     ports:
-      - 81:8080
+      - 81:8080 
     environment:
-      - ConnectionString=mongodb://admin:1234@mongodb:27017
+      - vaultConnectionString=https://vaulthost:8201
       - DatabaseName=4SemProj
       - collectionName=Katalog
+    container_name: catalogservice
+    hostname: catalogservice
     networks:
       - auctionnetwork
     restart: unless-stopped
 
-
+  authenticationservice:
+    image: rasmusdd/authenticationservice-image:latest
+    ports:
+      - 82:8080
+    environment:
+      - vaultConnectionString=https://vaulthost:8201
+      - userservicehost=http://userservice:8080
+    container_name: authenticationservice
+    hostname: authenticationservice
+    networks:
+      - auctionnetwork
+    command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management

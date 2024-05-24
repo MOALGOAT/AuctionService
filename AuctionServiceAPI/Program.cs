@@ -7,6 +7,7 @@ using AuctionServiceAPI.Models;
 using AuctionServiceAPI.Service;
 using NLog;
 using NLog.Web;
+using AuctionServiceAPI;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
     .GetCurrentClassLogger();
@@ -16,12 +17,20 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    var configuration=builder.Configuration;
+    var vaultService=new VaultService(configuration);
+    string connectionString=await vaultService.GetConnectionStringAsync("secrets", "MongoConnectionString");
+    configuration["MongoConnectionString"]=connectionString;
+    Console.WriteLine("Jeg hedder Furkan 123"+connectionString);
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddControllers();
+    builder.Services.AddTransient<VaultService>();
     builder.Services.AddSingleton<IAuctionService, AuctionMongoDBService>();
     builder.Services.AddSingleton<MongoDBContext>();
     builder.Services.AddHostedService<BidReceiver>();
+
    
 
 

@@ -44,9 +44,17 @@ public class BidReceiver : BackgroundService
 
     private async Task HandleMessageAsync(string message)
     {
-        using var scope = _serviceScopeFactory.CreateScope();
-        var auctionService = scope.ServiceProvider.GetRequiredService<IAuctionService>();
-        await auctionService.ProcessMessageAsync(message);
+        //logg
+        //deserialized 
+        //find auktion mongodb filter 
+        //indsæt på filtreret auktion
+
+
+       // using var scope = _serviceScopeFactory.CreateScope();
+        //var auctionService = scope.ServiceProvider.GetRequiredService<IAuctionService>();
+        //await auctionService.ProcessMessageAsync(message);
+        //her er bid modtaget - nu skal finde auktion - og sætte bud ind på list<bids>
+        //kan mongo gøre automatisk - mongoDB filter 
     }
 
     public override void Dispose()

@@ -9,5 +9,7 @@ namespace AuctionServiceAPI.Models
         User user { get; set; }
         public float bidPrice { get; set; }
         public Guid auctionId { get; set; }
+
+        public DateTime? dateTime { get; set; } = DateTime.Now;
     }
 }

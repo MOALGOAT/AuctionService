@@ -11,7 +11,6 @@ public class Auction
     public DateTime startTime { get; set; }
     public DateTime endTime { get; set; }
     public List<Bid> bids { get; set; }
-    public User buyer { get; set; }
     public User seller { get; set; }
     public Guid auctionId { get; set; }
 }

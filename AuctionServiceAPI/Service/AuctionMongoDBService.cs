@@ -34,7 +34,7 @@ namespace AuctionServiceAPI.Models
 
         public async Task ProcessBidAsync(Bid bid)
         {
-            var filter = Builders<Auction>.Filter.Eq(a => a._id, bid.auctionId);
+            var filter = Builders<Auction>.Filter.Eq(a => a.auctionId, bid.auctionId);
             var update = Builders<Auction>.Update.Push(a => a.bids, bid);
             var result = await _auctionCollection.UpdateOneAsync(filter, update);
 

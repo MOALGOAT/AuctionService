@@ -36,8 +36,16 @@ namespace AuctionServiceAPI.Models
         {
             var filter = Builders<Auction>.Filter.Eq(a => a._id, bid.auctionId);
             var update = Builders<Auction>.Update.Push(a => a.bids, bid);
-            await _auctionCollection.UpdateOneAsync(filter, update);
-            _logger.LogInformation($"Bid processed for auction {bid.auctionId}");
+            var result = await _auctionCollection.UpdateOneAsync(filter, update);
+
+            if (result.IsAcknowledged && result.ModifiedCount > 0)
+            {
+                _logger.LogInformation($"Bid processed and added to auction {bid.auctionId}");
+            }
+            else
+            {
+                _logger.LogWarning($"Failed to process bid for auction {bid.auctionId}");
+            }
         }
 
         public AuctionMongoDBService(ILogger<AuctionMongoDBService> logger, MongoDBContext dbContext, IConfiguration configuration)

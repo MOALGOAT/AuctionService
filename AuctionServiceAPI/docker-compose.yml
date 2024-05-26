@@ -33,21 +33,6 @@ services:
     networks:
       - auctionnetwork
     restart: unless-stopped
-      
- # authenticationservice:
-  #  image: rasmusdd/authenticationservice-image:latest
-   # ports:
-    #  - 82:8080
-    #environment:
-     # - ConnectionString=mongodb://admin:1234@mongodb:27017
-     # - DatabaseName=4SemProj
-     # - collectionName=Bruger
-     # - vaultConnectionString=https://vault_dev:8201
-    #container_name: authenticationservice
-    #hostname: authenticationservice
-    #networks:
-     # - auctionnetwork
-    #command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
 
   userservice:
     image: jakobhaulund/bruger-service-image:latest
@@ -58,7 +43,6 @@ services:
       - DatabaseName=4SemProj
       - collectionName=Bruger
       - vaultConnectionString=https://vaulthost:8201
-
     container_name: userservice
     hostname: userservice
     networks:
@@ -93,20 +77,20 @@ services:
     command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
     restart: unless-stopped
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    hostname: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    depends_on:
-      - userservice
+# rabbitmq:
+ #   image: rabbitmq:3-management
+  #  hostname: rabbitmq
+   # ports:
+    #  - "5672:5672"
+     # - "15672:15672"
+    #depends_on:
+     # - userservice
     #  - authenticationservice
-      - auction-service
-      - biddingservice
-      - catalogservice
-    networks:
-      - auctionnetwork
+     # - auction-service
+     # - biddingservice
+     # - catalogservice
+   # networks:
+    #  - auctionnetwork 
       
   nginx:
     image: nginx:latest
@@ -115,7 +99,7 @@ services:
       - "85:8080"
     depends_on:
       - userservice
-    #  - authenticationservice
+      - authenticationservice
       - auction-service
       - biddingservice
       - catalogservice

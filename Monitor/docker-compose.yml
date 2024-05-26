@@ -15,9 +15,12 @@ services:
       - "3000:3000"
     networks:
       - auctionnetwork
+    volumes:
+      - grafana-data:/var/lib/grafana
 
-      
 networks:
   auctionnetwork:
     external: true 
-      
+
+volumes:
+  grafana-data:

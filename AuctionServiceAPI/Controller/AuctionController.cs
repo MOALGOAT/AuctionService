@@ -144,42 +144,36 @@ namespace AuctionServiceAPI.Controllers
             return Ok(response);
         }
 
-       [HttpPost("/api/legal/auctions")]
-[Authorize(Roles = "3")]
-public async Task<ActionResult<IEnumerable<object>>> FilterLegalAuctions([FromBody] FilterRequest request)
-{
-    _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+        [HttpGet("/api/legal/auctions")]
+        [Authorize(Roles = "3")]
+        public async Task<ActionResult<IEnumerable<object>>> GetFutureLegalAuctions()
+        {
+            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
-    var auctions = await _auctionService.GetAuctionList();
-    if (auctions == null || !auctions.Any())
-    {
-        return NotFound(new { error = "No auctions found" });
-    }
+            var currentDate = DateTime.UtcNow.Date;
 
-    if (request.StartDate.HasValue)
-    {
-        auctions = auctions.Where(a => a.startTime >= request.StartDate.Value).ToList();
-    }
+            var auctions = await _auctionService.GetAuctionList();
+            if (auctions == null || !auctions.Any())
+            {
+                return NotFound(new { error = "No auctions found" });
+            }
 
-    var response = auctions.Select(a => new
-    {
-        id = a._id,
-        title = a.item.title,
-        description = a.item.description,
-        startDate = a.startTime,
-        endDate = a.endTime,
-        currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
-        createdBy = a.seller.username,
-        createdAt = a.startTime
-    });
+            auctions = auctions.Where(a => a.startTime.Date >= currentDate).ToList();
 
-    return Ok(response);
-}
+            var response = auctions.Select(a => new
+            {
+                id = a._id,
+                title = a.item.title,
+                description = a.item.description,
+                startDate = a.startTime,
+                endDate = a.endTime,
+                currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
+                createdBy = a.seller.username,
+                createdAt = a.startTime
+            });
 
-public class FilterRequest
-{
-    public DateTime? StartDate { get; set; }
-}
+            return Ok(response);
+        }
 
     }
 }

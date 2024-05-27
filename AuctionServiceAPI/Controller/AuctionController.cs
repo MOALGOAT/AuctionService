@@ -144,7 +144,7 @@ namespace AuctionServiceAPI.Controllers
             return Ok(response);
         }
 
-       [HttpPost("/api/legal/auctions/filter")]
+       [HttpPost("/api/legal/auctions")]
 [Authorize(Roles = "3")]
 public async Task<ActionResult<IEnumerable<object>>> FilterLegalAuctions([FromBody] FilterRequest request)
 {

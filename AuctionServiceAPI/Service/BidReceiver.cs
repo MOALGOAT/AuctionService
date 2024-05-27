@@ -32,7 +32,7 @@ public class BidReceiver : BackgroundService
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            _logger.LogInformation($" [x] Received {message}");
+            _logger.LogInformation($" Bid Received {message}");
             await HandleMessageAsync(message);
         };
         _channel.BasicConsume(queue: "bid_queue", autoAck: true, consumer: consumer);
@@ -46,12 +46,10 @@ public class BidReceiver : BackgroundService
 
         try
         {
-            // Deserialiser beskeden til en Bid objekt
             var bid = JsonSerializer.Deserialize<Bid>(message);
 
             if (bid != null)
             {
-                // Brug ProcessBidAsync metoden fra IAuctionService
                 await _auctionService.ProcessBidAsync(bid);
                 _logger.LogInformation("Auction updated with new bid.");
             }

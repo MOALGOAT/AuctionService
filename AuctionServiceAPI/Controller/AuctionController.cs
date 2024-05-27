@@ -144,37 +144,42 @@ namespace AuctionServiceAPI.Controllers
             return Ok(response);
         }
 
-        [HttpGet("/api/legal/auctions")]
-        [Authorize(Roles = "3")]
-        public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions([FromQuery] DateTime? startDate)
-        {
-            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+       [HttpPost("/api/legal/auctions/filter")]
+[Authorize(Roles = "3")]
+public async Task<ActionResult<IEnumerable<object>>> FilterLegalAuctions([FromBody] FilterRequest request)
+{
+    _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 
-            var auctions = await _auctionService.GetAuctionList();
-            if (auctions == null || !auctions.Any())
-            {
-                return NotFound(new { error = "No auctions found" });
-            }
+    var auctions = await _auctionService.GetAuctionList();
+    if (auctions == null || !auctions.Any())
+    {
+        return NotFound(new { error = "No auctions found" });
+    }
 
-            if (startDate.HasValue)
-            {
-                auctions = auctions.Where(a => a.startTime >= startDate.Value).ToList();
-            }
+    if (request.StartDate.HasValue)
+    {
+        auctions = auctions.Where(a => a.startTime >= request.StartDate.Value).ToList();
+    }
 
-            var response = auctions.Select(a => new
-            {
-                id = a._id,
-                title = a.item.title,
-                description = a.item.description,
-                startDate = a.startTime,
-                endDate = a.endTime,
-                currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
-                createdBy = a.seller.username, // Assuming CreatedBy can be the seller's username
-                createdAt = a.startTime // Assuming CreatedAt is the same as startTime
-            });
+    var response = auctions.Select(a => new
+    {
+        id = a._id,
+        title = a.item.title,
+        description = a.item.description,
+        startDate = a.startTime,
+        endDate = a.endTime,
+        currentBid = a.bids.Any() ? a.bids.Max(b => b.bidPrice) : 0,
+        createdBy = a.seller.username,
+        createdAt = a.startTime
+    });
 
-            return Ok(response);
-        }
+    return Ok(response);
+}
+
+public class FilterRequest
+{
+    public DateTime? StartDate { get; set; }
+}
 
     }
 }

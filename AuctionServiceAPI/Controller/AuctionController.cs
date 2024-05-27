@@ -118,7 +118,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet("/api/legal/auctions/{auctionId}")]
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<object>> GetLegalAuction(Guid auctionId)
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
@@ -145,7 +145,7 @@ namespace AuctionServiceAPI.Controllers
         }
 
         [HttpGet("/api/legal/auctions")]
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions([FromQuery] DateTime? startDate)
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");

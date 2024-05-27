@@ -153,12 +153,13 @@ namespace AuctionServiceAPI.Controllers
             var currentDate = DateTime.UtcNow.Date;
 
             var auctions = await _auctionService.GetAuctionList();
-            if (auctions == null || !auctions.Any())
+
+            auctions = auctions.Where(a => a.startTime.Date >= currentDate).ToList();
+
+            if (!auctions.Any())
             {
                 return NotFound(new { error = "No auctions found" });
             }
-
-            auctions = auctions.Where(a => a.startTime.Date >= currentDate).ToList();
 
             var response = auctions.Select(a => new
             {

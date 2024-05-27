@@ -146,7 +146,7 @@ namespace AuctionServiceAPI.Controllers
 
         [HttpGet("/api/legal/auctions")]
         [Authorize(Roles = "3")]
-        public async Task<ActionResult<IEnumerable<object>>> GetFutureLegalAuctions()
+        public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions()
         {
             _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
 

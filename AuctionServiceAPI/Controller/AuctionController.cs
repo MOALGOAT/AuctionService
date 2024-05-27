@@ -117,7 +117,7 @@ namespace AuctionServiceAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("legal/auctions/{auctionId}")]
+        [HttpGet("/legal/auctions/{auctionId}")]
         [Authorize(Roles = "2")]
         public async Task<ActionResult<object>> GetLegalAuction(Guid auctionId)
         {
@@ -144,7 +144,7 @@ namespace AuctionServiceAPI.Controllers
             return Ok(response);
         }
 
-        [HttpGet("legal/auctions")]
+        [HttpGet("/legal/auctions")]
         [Authorize(Roles = "2")]
         public async Task<ActionResult<IEnumerable<object>>> GetLegalAuctions([FromQuery] DateTime? startDate)
         {

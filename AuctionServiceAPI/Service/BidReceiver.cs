@@ -15,11 +15,11 @@ public class BidReceiver : BackgroundService
     private readonly ILogger<BidReceiver> _logger;
     private readonly IAuctionService _auctionService;
 
-    public BidReceiver(ILogger<BidReceiver> logger, IAuctionService auctionService) // Ændret
+    public BidReceiver(ILogger<BidReceiver> logger, IAuctionService auctionService) 
     {
         _logger = logger;
-        _auctionService = auctionService; // Tilføjet
-        var factory = new ConnectionFactory { HostName = Environment.GetEnvironmentVariable("QueueHostName") }; // Brug værtsnavnet defineret i Docker Compose
+        _auctionService = auctionService; 
+        var factory = new ConnectionFactory { HostName = Environment.GetEnvironmentVariable("QueueHostName") }; 
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         _channel.QueueDeclare(queue: "bid_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
@@ -42,8 +42,7 @@ public class BidReceiver : BackgroundService
 
     private async Task HandleMessageAsync(string message)
     {
-        // Log modtagelse af besked
-        _logger.LogInformation($" [x] Received {message}");
+        _logger.LogInformation($"Bid received {message}");
 
         try
         {
@@ -58,12 +57,12 @@ public class BidReceiver : BackgroundService
             }
             else
             {
-                _logger.LogError("Failed to deserialize bid message.");
+                _logger.LogError("Failed to deserialize bid.");
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error processing message: {ex.Message}");
+            _logger.LogError($"Error processing bid: {ex.Message}");
         }
     }
 

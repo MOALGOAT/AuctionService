@@ -9,10 +9,10 @@ services:
       - "83:8080"
     environment:
       - vaultConnectionString=https://vaulthost:8201
-      - DatabaseName=4SemProj
-      - collectionName=Bidding
+     # - DatabaseName=4SemProj
+     # - collectionName=Bidding 
       - QueueHostName=rabbitmq
-      - vaultConnectionString=https://vaulthost:8201
+     # - vaultConnectionString=https://vaulthost:8201
     networks:
       - auctionnetwork
     restart: unless-stopped
@@ -25,7 +25,7 @@ services:
     environment:
       - ConnectionString=mongodb://admin:1234@mongodb:27017
       - DatabaseName=4SemProj
-      - collectionName=Auktion
+      - collectionName=Auction
       - QueueHostName=rabbitmq
       - vaultConnectionString=https://vaulthost:8201
     container_name: auction-service
@@ -41,7 +41,7 @@ services:
     environment:
       - ConnectionString=mongodb://admin:1234@mongodb:27017
       - DatabaseName=4SemProj
-      - collectionName=Bruger
+      - collectionName=User
       - vaultConnectionString=https://vaulthost:8201
     container_name: userservice
     hostname: userservice
@@ -56,7 +56,7 @@ services:
     environment:
       - vaultConnectionString=https://vaulthost:8201
       - DatabaseName=4SemProj
-      - collectionName=Katalog
+      - collectionName=Catalog
     container_name: catalogservice
     hostname: catalogservice
     networks:
@@ -76,21 +76,6 @@ services:
       - auctionnetwork
     command: ["/bin/sh", "-c", "sleep 20 && dotnet Authentication.dll"]
     restart: unless-stopped
-
-# rabbitmq:
- #   image: rabbitmq:3-management
-  #  hostname: rabbitmq
-   # ports:
-    #  - "5672:5672"
-     # - "15672:15672"
-    #depends_on:
-     # - userservice
-    #  - authenticationservice
-     # - auction-service
-     # - biddingservice
-     # - catalogservice
-   # networks:
-    #  - auctionnetwork 
       
   nginx:
     image: nginx:latest

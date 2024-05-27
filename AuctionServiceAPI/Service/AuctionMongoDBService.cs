@@ -16,7 +16,7 @@ namespace AuctionServiceAPI.Models
         Task<Guid> AddAuction(Auction auction);
         Task<long> UpdateAuction(Auction auction);
         Task<long> DeleteAuction(Guid auctionId);
-        Task ProcessMessageAsync(string message);
+       // Task ProcessMessageAsync(string message);  ------------- SLET DETTE
         Task ProcessBidAsync (Bid bid);
     }
 
@@ -24,13 +24,10 @@ namespace AuctionServiceAPI.Models
     {
         private readonly ILogger<AuctionMongoDBService> _logger;
         private readonly IMongoCollection<Auction> _auctionCollection;
-        public async Task ProcessMessageAsync(string message)
-            {
-                // Implement your message processing logic here
-                _logger.LogInformation($"Processing message: {message}");
-                // Example: Parse the message and perform operations
-            }
-
+       /* public async Task ProcessMessageAsync(string message)
+        {
+            _logger.LogInformation($"Processing message: {message}");
+        } ------------- SLET DETTE */
 
         public async Task ProcessBidAsync(Bid bid)
         {

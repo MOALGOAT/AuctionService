@@ -19,7 +19,6 @@ namespace AuctionServiceAPI
             var EndPoint = _config["vaultConnectionString"];
             var httpClientHandler = new HttpClientHandler();
 
-            // Tillad forbindelser til usikre HTTP-endepunkter
             httpClientHandler.ServerCertificateCustomValidationCallback =
                 (message, cert, chain, sslPolicyErrors) => true;
 
@@ -44,25 +43,22 @@ namespace AuctionServiceAPI
             {
                 var secret = await _vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path: path, mountPoint: "secret");
 
-                // Kontroller om secret blev fundet
                 if (secret != null && secret.Data != null && secret.Data.Data != null && secret.Data.Data.ContainsKey(key))
                 {
                     return secret.Data.Data[key].ToString();
                 }
                 else
                 {
-                    throw new Exception($"Secret med nøglen '{key}' blev ikke fundet under stien '{path}'.");
+                    throw new Exception($"Secret with key '{key}' was not found in path '{path}'.");
                 }
             }
             catch (VaultApiException ex)
             {
-                // Håndter fejl fra Vault API
-                throw new Exception($"Fejl ved hentning af secret fra Vault: {ex.Message}");
+                throw new Exception($"Error retreiving secret from vault: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Generel fejlhåndtering
-                throw new Exception($"Der opstod en uventet fejl: {ex.Message}");
+                throw new Exception($"Unexpected error occured: {ex.Message}");
             }
         }
         
@@ -70,28 +66,24 @@ namespace AuctionServiceAPI
         {
             try
             {
-                // Forsøg at læse secret fra Vault
                 var kv2Secret = await _vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path: path, mountPoint: "secret");
 
-                // Kontroller om secret blev fundet
                 if (kv2Secret != null && kv2Secret.Data != null && kv2Secret.Data.Data != null && kv2Secret.Data.Data.ContainsKey(key))
                 {
                     return kv2Secret.Data.Data[key].ToString();
                 }
                 else
                 {
-                    throw new Exception($"Secret med nøglen '{key}' blev ikke fundet under stien '{path}'.");
+                    throw new Exception($"Secret with key '{key}' was not found in path '{path}'.");
                 }
             }
             catch (VaultApiException ex)
             {
-                // Håndter fejl fra Vault API
-                throw new Exception($"Fejl ved hentning af secret fra Vault: {ex.Message}");
+                throw new Exception($"Error retreiving key from vault: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Generel fejlhåndtering
-                throw new Exception($"Der opstod en uventet fejl: {ex.Message}");
+                throw new Exception($"Unexpected error occured: {ex.Message}");
             }
         }
 

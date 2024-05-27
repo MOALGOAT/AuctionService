@@ -37,7 +37,7 @@ namespace AuctionServiceAPI.Controllers
         [Authorize(Roles = "1,2")]
         public async Task<ActionResult<Auction>> GetAuction(Guid _id)
         {
-            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+            _logger.LogInformation(1, $"Auction service responding from {GetIpAddress()}");
 
             var auction = await _auctionService.GetAuction(_id);
             if (auction == null)
@@ -51,7 +51,7 @@ namespace AuctionServiceAPI.Controllers
         [Authorize(Roles = "1,2")]
         public async Task<ActionResult<IEnumerable<Auction>>> GetAuctionList()
         {
-            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+            _logger.LogInformation(1, $"Auction service responding from {GetIpAddress()}");
 
             var auctionList = await _auctionService.GetAuctionList();
 
@@ -69,10 +69,10 @@ namespace AuctionServiceAPI.Controllers
             try
             {
                 _logger.LogInformation($"Received request to add auction: {auction._id}");
-                _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+                _logger.LogInformation(1, $"Auction service responding from {GetIpAddress()}");
 
                 var auctionId = await _auctionService.AddAuction(auction);
-                return Ok(auctionId);
+                return Ok($"Auction with id {auctionId}, was added successfully.");
             }
             catch (Exception ex)
             {
@@ -90,23 +90,23 @@ namespace AuctionServiceAPI.Controllers
 
             if (_id != auction._id)
             {
-                return BadRequest("ding ding ding ding du fik et badrequest fordi id ikke matcher! :D");
+                return BadRequest("Bad request, ids not matching");
             }
 
             var result = await _auctionService.UpdateAuction(auction);
             if (result == 0)
             {
-                return NotFound();
+                return NotFound("Auction not found");
             }
 
-            return NoContent();
+            return Ok($"Auction with id {_id} updated successfully");
         }
 
         [HttpDelete("{_id}")]
         [Authorize(Roles = "2")]
         public async Task<IActionResult> DeleteAuction(Guid _id)
         {
-            _logger.LogInformation(1, $"XYZ Service responding from {GetIpAddress()}");
+            _logger.LogInformation(1, $"auction service responding from {GetIpAddress()}");
 
             var result = await _auctionService.DeleteAuction(_id);
             if (result == 0)
@@ -114,7 +114,7 @@ namespace AuctionServiceAPI.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return Ok($"Auction with id {_id} deleted successfully");
         }
 
         [HttpGet("/api/legal/auctions/{auctionId}")]

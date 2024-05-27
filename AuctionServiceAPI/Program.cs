@@ -26,19 +26,17 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    var configuration=builder.Configuration;
+    var configuration = builder.Configuration;
 
-    var vaultService=new VaultService(configuration);
+    var vaultService = new VaultService(configuration);
 
     string mySecret = await vaultService.GetSecretAsync("secrets", "SecretKey");
     string myIssuer = await vaultService.GetSecretAsync("secrets", "IssuerKey");
 
-    string connectionString=await vaultService.GetConnectionStringAsync("secrets", "MongoConnectionString");
+    string connectionString = await vaultService.GetConnectionStringAsync("secrets", "MongoConnectionString");
 
-    configuration["MongoConnectionString"]=connectionString;
+    configuration["MongoConnectionString"] = connectionString;
     vaultService = new VaultService(configuration);
-
-    Console.WriteLine("Jeg hedder Furkan 123"+connectionString);
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -48,7 +46,7 @@ try
     builder.Services.AddSingleton<MongoDBContext>();
     builder.Services.AddHostedService<BidReceiver>();
 
-        // Configure JWT Authentication
+    // Configure JWT Authentication
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,10 +63,9 @@ try
             ValidIssuer = myIssuer,
             ValidAudience = "http://localhost",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret)),
-            ClockSkew = TimeSpan.Zero // hmmmmmm
+            ClockSkew = TimeSpan.Zero
         };
 
-        // Tilføj event handler for OnAuthenticationFailed
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = context =>
@@ -105,7 +102,6 @@ try
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();

@@ -20,7 +20,6 @@ services:
     ports:
       - 84:8080
     environment:
-      - ConnectionString=mongodb://admin:1234@mongodb:27017
       - DatabaseName=4SemProj
       - collectionName=Auction
       - QueueHostName=rabbitmq
@@ -36,7 +35,6 @@ services:
     ports:
       - 80:8080
     environment:
-      - ConnectionString=mongodb://admin:1234@mongodb:27017
       - DatabaseName=4SemProj
       - collectionName=User
       - vaultConnectionString=https://vaulthost:8201

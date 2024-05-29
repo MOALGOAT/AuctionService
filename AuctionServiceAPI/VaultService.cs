@@ -37,7 +37,7 @@ namespace AuctionServiceAPI
             _vaultClient = new VaultClient(vaultClientSettings);
         }
 
-        public async Task<string> GetConnectionStringAsync(string path, string key)
+        public async Task<string?> GetConnectionStringAsync(string path, string key)
         {
             try
             {
@@ -58,11 +58,11 @@ namespace AuctionServiceAPI
             }
             catch (Exception ex)
             {
-                throw new Exception($"Unexpected error occured: {ex.Message}");
+                return null + "fejl ved hentning af connectionstring";
             }
         }
         
-        public async Task<string> GetSecretAsync(string path, string key)
+        public async Task<string?> GetSecretAsync(string path, string key)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace AuctionServiceAPI
             }
             catch (Exception ex)
             {
-                throw new Exception($"Unexpected error occured: {ex.Message}");
+                return null + "fejl ved hentning af secret";
             }
         }
 

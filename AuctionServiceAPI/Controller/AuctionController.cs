@@ -71,8 +71,8 @@ namespace AuctionServiceAPI.Controllers
                 _logger.LogInformation($"Received request to add auction: {auction._id}");
                 _logger.LogInformation(1, $"Auction service responding from {GetIpAddress()}");
 
-                auction.auctionId = Guid.NewGuid();
-                return Ok($"Auction with id {auction._id}, was added successfully.");
+                var auctionId = await _auctionService.AddAuction(auction);
+                return Ok($"Auction with id {auctionId}, was added successfully.");
             }
             catch (Exception ex)
             {

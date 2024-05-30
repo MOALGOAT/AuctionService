@@ -12,6 +12,6 @@ public class Auction
     public DateTime endTime { get; set; }
     public List<Bid> bids { get; set; }
     public User seller { get; set; }
-    public Guid auctionId { get; set; }
+    public Guid auctionId { get; set; } = Guid.NewGuid();
 }
 

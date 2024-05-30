@@ -58,7 +58,8 @@ namespace AuctionServiceAPI
             }
             catch (Exception ex)
             {
-                return null + "fejl ved hentning af secret";
+                Console.WriteLine("Error retreiving key from vault");
+                return null;
             }
         }
     }

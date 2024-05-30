@@ -65,6 +65,7 @@ namespace AuctionServiceAPI.Models
 
         public async Task<Guid> AddAuction(Auction auction)
         {
+            auction.auctionId = Guid.NewGuid();
             await _auctionCollection.InsertOneAsync(auction);
             return auction._id;
         }

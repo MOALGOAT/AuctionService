@@ -1,0 +1,38 @@
+[
+        {
+          "title": "Cowboybukser",
+          "description": "Retro blå cowboybukser",
+          "category": "Tøj",
+          "startingPrice": 50,
+          "status": "not sold"
+        },
+        {
+          "title": "Lenovo Thinkpad T14",
+          "description": "Super fin computer",
+          "category": "Computer",
+          "startingPrice": 1500,
+          "status": "not sold"
+        },
+        {
+          "title": "Casio ur",
+          "description": "Japansk ur med metalrem",
+          "category": "urværk",
+          "startingPrice": 100,
+          "status": "not sold"
+        },
+        {
+          "title": "Stanley termokande",
+          "description": "Sort stanley termokande",
+          "category": "Køkkenredskaber",
+          "startingPrice": 30,
+          "status": "not sold"
+        },
+        {
+          "title": "Weber grill",
+          "description": "Brugt Weber grill med minimale mærker",
+          "category": "Have og fritid",
+          "startingPrice": 400,
+          "status": "not sold"
+        }
+      ]
+      

@@ -1,0 +1,73 @@
+[
+    {
+      "firstName": "Jakob",
+      "lastName": "Haulund",
+      "email": "jakob@mail.com",
+      "address": "Viby J",
+      "telephoneNumber": "11111111",
+      "role": 1,
+      "username": "jakob",
+      "password": "1234"
+    },
+    {
+      "firstName": "Rasmus",
+      "lastName": "Damgaard",
+      "email": "rasmus@mail.com",
+      "address": "Aarhus C",
+      "telephoneNumber": "22222222",
+      "role": 1,
+      "username": "rasmus",
+      "password": "1234"
+    },
+    {
+      "firstName": "Lukas",
+      "lastName": "Villadsen",
+      "email": "lukas@mail.com",
+      "address": "Åbyhøj",
+      "telephoneNumber": "33333333",
+      "role": 1,
+      "username": "lukas",
+      "password": "1234"
+    },
+    {
+      "firstName": "Furkan",
+      "lastName": "Cosgun",
+      "email": "furkan@mail.com",
+      "address": "Morfarparken",
+      "telephoneNumber": "44444444",
+      "role": 1,
+      "username": "furkan",
+      "password": "1234"
+    },
+    {
+      "firstName": "Salim",
+      "lastName": "Jama",
+      "email": "salim@mail.com",
+      "address": "Aarhus N",
+      "telephoneNumber": "55555555",
+      "role": 1,
+      "username": "salim",
+      "password": "1234"
+    },
+    {
+      "firstName": "Admin",
+      "lastName": "Admin",
+      "email": "admin@mail.com",
+      "address": "EAAA",
+      "telephoneNumber": "66666666",
+      "role": 2,
+      "username": "admin",
+      "password": "1234"
+    },
+    {
+      "firstName": "Legal",
+      "lastName": "Legal",
+      "email": "legal@mail.com",
+      "address": "PET",
+      "telephoneNumber": "77777777",
+      "role": 3,
+      "username": "legal",
+      "password": "1234"
+    }
+  ]
+  
